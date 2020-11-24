@@ -13,7 +13,7 @@
     </head>
     <body>
         <div id="app">
-
+            @include('includes.header')
         </div>
         <script type="text/javascript" src="{{ asset('js/jquery.min.js')}}"></script>
         <script type="text/javascript" src="{{ asset('js/materialize.min.js')}}"></script>
