@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'admin', 'password','session_id'
     ];
 
     /**
@@ -36,4 +36,22 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function profile()
+    {
+        return $this->hasOne('App\Profile');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany('App\Post');
+    }
+    public $incrementing = false;
+    public static function boot(){
+        parent::boot();
+        static::creating(function ($user){
+            $user->id = str_random(20);
+        });
+    }
+
 }

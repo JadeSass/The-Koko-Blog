@@ -1,39 +1,31 @@
 <header class="navbar-fixed">
-    <nav class="white black-text">
+    <nav class="black-text white-text nav-extended nav-extend">
         <div class="nav-wrapper container">
-            <a href="#" class="brand-logo left">TKB</a>
-            <ul class="right">
-                @guest
-                    <li>
-                        <a href="#" class="black-text dropdown-trigger" data-target='dropdown1'><i class="fa fa-user-circle-o black-text"></i></a>
-                    </li>
-                    <!-- Dropdown Structure -->
-                    <ul id='dropdown1' class='dropdown-content nosh boardered-dv'>
-                        <div class="item-bd">
-                            <h6 class="lnht">Join the koko blog</h6>
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit in, molestiae voluptatem maiores facilis blanditiis!</p>
-                        </div>
-                        <li class="divider" tabindex="-1"></li>
-                        <div class="row">
-                            <li>
-                                <a class="waves-effect" href="{{ route('login') }}">{{ __('Login') }} </a>
-                            </li>
-                                @if (Route::has('register'))
-                            <li>
-                                <a href="{{ route('register') }}" class="waves-effect">{{ __('Register') }}</a>
-                            </li>
-                                @endif
-                        </div>
-                    </ul>
-                    @else
-                    <li class="white-text">
-                        <a href="#" class="white-text"><i class="fa fa-user-circle-o"></i> {{ Auth::user()->name }}</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="white-text waves-effect waves-light"><i class="fa fa-sign-out"></i></a>
-                    </li>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-                @endguest
+            <a href="#" class="brand-logo left blue-text">Koko Blog</a>
+            <form action="/results" method="GET" class="container">
+                <div class="input-field hoverable">
+                    <input type="search" class="searchnav" placeholder="Search..."  id="search" name="query" required>
+                    <label for="search" class="label-icon grey-text text-darken-3"><i class="fa fa-search search grey-text text-darken-3"></i></label>
+                    <!-- <div class="ht" style="height: 30vh;">
+                        ttyyy
+                    </div> -->
+                </div>
+            </form>
+        </div>
+
+        <div class="nav-content center center-align nav-stick container-tab">
+          <ul class="tabs tabs-transparent row">
+                <li class="tab active-nav"><a href="{{route('index')}}" class="refs"><i class="fa fa-home navcon"></i> Home</a></li>
+                @foreach($categories as $category)
+                <li class="tab"><a href="{{route('post.index')}}" class="refs"><i class="fa fa-image navcon"></i> {{$category->name}}</a></li>
+                @endforeach
+                <li class="tab">
+                    <div class="switch theme-switch-wrapper">
+                        <label class="theme-switch">
+                            Light <input type="checkbox" id="checkbox"><span class="lever"></span> Dark
+                        </label>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
