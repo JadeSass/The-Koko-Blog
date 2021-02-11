@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 use Session;
 use App\Category;
+use App\Post;
+use Auth;
 
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,8 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        return view('user.categories.index')->with('categories', Category::all());
+        return view('user.categories.index')->with('categories', Category::all())
+                                            ->with('post', Post::all());
     }
 
     /**
@@ -38,14 +45,16 @@ class CategoriesController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
+            // 'content' => 'required'
         ]);
 
         $category = new Category;
 
         $category->name = $request->name;
+        $category->content = $request->content;
         $category->save();
 
-        Session::flash('message', 'You succesfully created a category.');
+        Session::flash('message', 'You succesfully created a page.');
 
         return redirect()->back();
     }
@@ -86,10 +95,11 @@ class CategoriesController extends Controller
         $category = Category::find($id);
 
         $category->name = $request->name;
+        $category->content = $request->content;
 
         $category->save();
 
-        Session::flash('message', 'You succesfully updated the category.');
+        Session::flash('message', 'You succesfully updated the page.');
 
         return redirect()->back();
     }
@@ -110,7 +120,7 @@ class CategoriesController extends Controller
 
         $category->delete();
 
-        Session::flash('message', 'You succesfully deleted the category.');
+        Session::flash('message', 'You succesfully deleted the page.');
 
         return redirect()->back();
     }

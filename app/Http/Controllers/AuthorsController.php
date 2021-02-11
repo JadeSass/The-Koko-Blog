@@ -22,7 +22,21 @@ class AuthorsController extends Controller
      */
     public function index()
     {
-        return view('user.author.index')->with('users', User::all());
+        $users = User::all();
+        return view('user.author.index')->with('users', $users);
+    }
+
+    public function multipleDelete(Request $request)
+    {
+        $id = $request->id;
+
+        foreach ($id as $user)
+        {
+            User::where('id', $user)->delete();
+        }
+        Session::flash('message', 'Successfully deleted some users.');
+
+        return redirect()->back();
     }
 
     /**
@@ -32,7 +46,7 @@ class AuthorsController extends Controller
      */
     public function create()
     {
-
+        return view('user.author.create');
     }
 
     /**
@@ -51,7 +65,7 @@ class AuthorsController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt('password'),
+            'password' => bcrypt('kokobloguser123'),
             'session_id' => str_random(20)
         ]);
 

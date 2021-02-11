@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>@if($query ?? '') Search Result for {{$query ?? ''}} @else($post ?? '') {{$post->title ?? ''}} @endif</title>
+        <title>@if($query ?? '') Search Result for {{$query }} @elseif ($category ?? '') {{$category->name}} - {{$category->content}} @else ($post ?? '' ) {{$post->title ?? '' }} @endif</title>
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -21,10 +21,11 @@
                         <div class="widget col xl9 l9 m8 s12">
                             @yield('content')
                         </div>
-                        @include('includes.sidebar-right')
+                        @include('includes.sidebar-right-index')
                     </div>
                 </div>
             </div>
+            @include('includes.footer')
         </div>
         <script type="text/javascript" src="{{ asset('js/jquery.min.js')}}"></script>
         <script type="text/javascript" src="{{ asset('js/materialize.min.js')}}"></script>

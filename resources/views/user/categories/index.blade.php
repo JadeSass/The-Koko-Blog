@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('content')
 <div class="wrap">
+    <nav class="transparent nosh">
+        <div class="form-header">
+            <h5 class="black-text left-align left">Pages</h5>
+        </div>
+    </nav>
     <div class="row">
         <div class="col s12 m12 l12 xl12">
             <div class="col s12 m12 l6 xl6">
@@ -8,73 +13,62 @@
                     <form action="{{route('category.store')}}" method="post" enctype="multipart/form-data">
                     {{ csrf_field() }}
                         <div class="form-header">
-                            <h5 class="black-text center-align center">Category board</h5>
+                            <h5 class="black-text left-align left">Add New Page</h5>
                         </div>
                         @include('user.include.errors')
-                        <div class="card nosh bdr">
-                            <div class="card-content">
-                                <div class="content-header">
-                                    <p class="dgb-text"><i class="fa fa-user-circle-o icon-top"></i> General</p>
-                                </div>
-                                <div class="divider"></div>
-                                <div class="content-list">
-                                    <!-- card counting -->
-                                </div>
-                                <div class="row">
-                                    <div class="input-wrapper col s12 m6 l12 xl12">
-                                        <div class="input-field">
-                                            <input type="text" name="name" id="title" class="validate">
-                                            <label for="title">Category Title</label>
-                                        </div>
-                                    </div>
-                                    <div class="col s12 m12 l12 xl12">
-                                        <button class="btn green darken-3 col s12 m12 l12 xl12 waves-effect" type="submit"><i class="fa fa-save"></i> Save Category</button>
+                        <div class="page-form">
+                            <div class="row">
+                                <div class="input-wrapper col s12 m12 l12 xl12">
+                                    <div class="input-field">
+                                        <input type="text" name="name" id="title" class="validate">
+                                        <i class="grey-text">The name is how it appears on the site.</i>
+                                        <label for="title">Page Title</label>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card nosh bdr">
-                            <div class="card-content">
-                                <div class="content-header">
-                                    <p class="dgb-text"><i class="fa fa-tag icon-top"></i> All Categories </p>
+                                <div class="input-wrapper col s12 m12 l12 xl12">
+                                    <div class="input-field">
+                                        <input type="text" name="" id="slug" class="disabled" value="my-post-example" disabled>
+                                        <i class="grey-text">The "slug" is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers and hyphens.</i>
+                                        <label for="title">Slug</label>
+                                    </div>
                                 </div>
-                                <div class="divider" style="margin-bottom: 10px;"></div>
-                                <div class="content-list">
-                                    <!-- card counting -->
+                                <div class="input-wrapper col s12 m12 l12 xl12">
+                                    <div class="input-field">
+                                        <textarea name="content" style="height: 20vh;"  id="content" class="validate materialize-textarea white"></textarea>
+                                        <i class="grey-text">The description is not prominent by default, however, some places may show it.</i>
+                                        <label for="description">Description</label>
+                                    </div>
                                 </div>
-                                <div class="row">
-                                @if($categories->count() > 0)
-                                    @foreach($categories as $category)
-                                        <div class="chip">{{ $category->name}}</div>
-                                    @endforeach
-                                @else
-                                    <div class="center-align">No Categories yet.</div>
-                                @endif
-                                </div>
+                                <button class="btn-flat blue darken-3 waves-effect white-text" type="submit">Add New Page</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="row collapse-info">
+            <div class="collapse-info">
                 <div class="col s12 l6 m12 xl6">
-                    <div class="form-header">
-                        <h5 class="black-text center-align center">Action Panel</h5>
-                    </div>
-                    <div class="card nosh bdr">
-                        <div class="card-content">
-                            <div class="height-help">
-                                <table class="table striped">
+                    <ul class="collapsible nosh">
+                        <li class="active">
+                            <div class="collapsible-header coll-table nosh white">
+                                <table>
                                     <thead>
-                                    <th>Category Name</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
                                     </thead>
+                                </table>
+                            </div>
+                            <div class="collapsible-body body-col white" >
+                                <table class="table striped">
                                     <tbody>
                                     @if($categories->count() > 0)
                                         @foreach($categories as $category)
                                         <tr>
                                             <td>{{ $category->name}}</td>
+                                            @if($category->content == '')
+                                            <td><i>Description is NULL</i></td>
+                                            @else
+                                            <td>{{$category->content}}</td>
+                                            @endif
                                             <td><a href="{{ route('category.edit', ['id' => $category -> id])}}" class="green-text text-darken-3"><b>Edit</b></a></td>
                                             <td><a href="{{ route('category.delete', ['id' => $category -> id])}}" class="red-text text-darken-3"><b>Trash</b></a></td>
                                         </tr>
@@ -88,8 +82,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
+                    <i class="grey-text"><b>Note:</b><br> Deleting a category does not delete the post, instead posts that were only unsigned to the deleted category are set to a null category.</i>
                 </div>
             </div>
         </div>

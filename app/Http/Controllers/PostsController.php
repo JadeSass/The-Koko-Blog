@@ -6,6 +6,8 @@ use App\Post;
 use App\Profile;
 use Auth;
 use App\Category;
+use App\User;
+use Image;
 
 use Illuminate\Http\Request;
 
@@ -18,16 +20,46 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $posts = Post::all();
+        return view('user.posts.index')->with('posts', $posts);
 
-        if($categories->count() == 0)
+    }
+
+    /**
+     * Display a listing of the media resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function media()
+    {
+        $images = \File::allFiles(public_path('uploads/posts'));
+
+        return view('user.media.index')->with(['images'=> $images]);
+
+    }
+
+    public function postDelete(Request $request)
+    {
+        $id = $request->id;
+
+        foreach ($id as $posts)
         {
-            Session::flash('message', 'You must have some categories before attempting to create a post.');
-
-            return redirect()->back();
+            Post::where('id', $posts)->delete();
         }
+        Session::flash('message', 'Successfully deleted some posts.');
 
-        return view('user.posts.index')->with('categories', $categories)->with('posts', Post::all());
+        return redirect()->back();
+    }
+
+    public function deleteMedia()
+    {
+        $path = $_GET['url'];
+        $url = public_path('uploads/posts/'.$path);
+        // dd($path);
+        \File::delete($url);
+        Session::flash('message', 'You deleted a media file.');
+        return redirect()->back();
+
     }
 
     /**
@@ -37,7 +69,17 @@ class PostsController extends Controller
      */
     public function create()
     {
+        $categories = Category::all();
 
+        if($categories->count() == 0)
+        {
+            Session::flash('message', 'You must have some categories before attempting to create a post.');
+
+            return redirect()->back();
+        }
+
+        return view('user.posts.create')->with('categories', $categories)
+                                        ->with('posts', Post::all());
     }
 
     /**
@@ -60,9 +102,14 @@ class PostsController extends Controller
 
         $image = $request->image;
 
-        $image_new_name = time().$image->getClientOriginalName();
+        $image_new_name = "kokoblog". str_random(5) .time() . $image->getClientOriginalName();
 
-        $image->move('uploads/posts', $image_new_name);
+        $img = Image::make($image->path());
+
+        $img->save('uploads/posts/' . $image_new_name, 60);
+
+
+        // $image->move('uploads/posts', $image_new_name);
 
         $post = Post::create([
             'title' => $request->title,
@@ -127,7 +174,7 @@ class PostsController extends Controller
         {
             $image = $request->image;
 
-            $image_new_name = time() . $image->getClientOriginalName();
+            $image_new_name = "kokoblog". str_random(5) .time() . $image->getClientOriginalName();
 
             $image->move('uploads/posts', $image_new_name);
 
@@ -176,6 +223,19 @@ class PostsController extends Controller
         $post->forceDelete();
 
         Session::flash('message', 'Post deleted permanently.');
+
+        return redirect()->back();
+    }
+
+    public function postTrash(Request $request)
+    {
+        $id = $request->id;
+
+        foreach ($id as $posts)
+        {
+            Post::where('id', $posts)->forceDelete();
+        }
+        Session::flash('message', 'Permanently deleted some posts.');
 
         return redirect()->back();
     }

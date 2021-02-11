@@ -5,6 +5,9 @@ $(function(){
         coverTrigger: false,
         closeOnClick: true
     });
+    $('.close-info').click(function(){
+        $('.info-control').remove()
+    });
     $('.lazy').lazy({
         enableThrottle: true,
         throttle: 250,
@@ -36,7 +39,6 @@ $(document).ready(function(){
 
 
 let tog = document.getElementsByClassName("reply-tog");
-console.log(tog);
 for(let x = 0; x < tog.length; x += 1) {
     tog.item(x).addEventListener("click", function(){
         let reply = document.getElementsByClassName("drop-form");
@@ -76,7 +78,6 @@ if (currentTheme) {
         toggleSwitch.checked = true;
     }
 }
-
 // setimage optimizations
 function remChild (){
     let opt = document.getElementsByClassName("image-wrap");
@@ -84,17 +85,23 @@ function remChild (){
         opt[x].parentNode.removeChild(opt[x]);
     }
 }
-
+function stat (){
+    let status = document.querySelector(".optimize-status");
+    status.style.display = "block";
+}
 const toggleOpt = document.querySelector('.optimize-switch input[type="checkbox"]');
 
 function switchOpt(e) {
     if (e.target.checked) {
         location.reload();
-        remChild ();
-        localStorage.setItem('opt',  remChild ());
+        remChild();
+        stat();
+        localStorage.setItem('opt',  remChild());
+        localStorage.setItem('stat',  stat());
         return false;
     }else{
-        localStorage.removeItem('opt',  remChild ());
+        localStorage.removeItem('opt',  remChild());
+        localStorage.removeItem('stat',  stat());
     }
 }
 
@@ -102,21 +109,26 @@ toggleOpt.addEventListener('change', switchOpt, false);
 function switchOpt(e) {
     if (e.target.checked) {
         location.reload();
-        remChild ();
-        localStorage.setItem('opt', remChild ()); //add this
+        remChild();
+        stat();
+        localStorage.setItem('opt', remChild());
+        localStorage.setItem('stat',  stat());
         return false;
     }else{
         location.reload();
-        localStorage.removeItem('opt',  remChild ());
+        localStorage.removeItem('opt',  remChild());
+        localStorage.removeItem('stat',  stat());
         return false;
     }
 }
 const currentOpt = localStorage.getItem('opt') ? localStorage.getItem('opt') : null;
+const statOpt = localStorage.getItem('stat') ? localStorage.getItem('stat') : null;
 
-if (currentOpt) {
+if (currentOpt && statOpt) {
     localStorage.getItem('opt', currentOpt);
+    localStorage.getItem('stat', statOpt);
 
-    if (currentOpt.getItem == remChild()) {
+    if (currentOpt.getItem == remChild() && statOpt.getItem == stat()) {
         toggleOpt.checked = true;
     }
 }

@@ -18,58 +18,104 @@
 </head>
 <body>
     <div id="app">
-        <header class=" special-header navbar-fixed">
-            <nav class="white white-text nav-extended">
+    @if(Auth::check())
+        <header class="special-header navbar-fixed">
+            <nav class="black white-text nosh">
                 <div class="nav-wrapper container">
-                    <ul class="right">
-                    @guest
-                        <li><a class="waves-effect black-text" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                        @if (Route::has('register'))
-                        <li><a href="{{ route('register') }}" class="waves-effect black-text">{{ __('Register') }}</a></li>
-                        @endif
-                    @else
-                        <li>
-                        <img src="{{ asset(Auth::user()->profile->avatar) }}" lazy="loading" alt="{{ Auth::user()->name}}" height="45px" width="45px" class="" style="border-radius: 45px; line-height:45px; margin-top:3px;">
-                        </li>
-                        <li>
-                        <a href="{{route('profile.index')}}" class="dropdown-trigger text-accent-3 black-text" data-target="dropProfile"><b>{{ Auth::user()->name }}</b></a>
-                        </li>
-                    @endguest
+                    <ul class="left">
+                        <li class="hide-on-small-and-down">Kokoblog</li>
+                        <li><a href="{{ route('post.create') }}" class=""><i class="fa fa-plus"></i> New</a></li>
                     </ul>
-                </div>
-                <div class="nav-content center center-align nav-stick container-tab show-on-medium-and-down hide-on-large-only hide-on-extra-large-only">
-                    <ul class="tabs tabs-transparent row">
-                        <li class="tab active-nav"><a href="{{route('home')}}" class="refs"><i class="fa fa-home navcon"></i> Home</a></li>
-                        <li class="tab active-nav"><a href="{{ route('category.index') }}"><i class="fa fa-home navcon"></i> Category</a></li>
-                        <li class="tab active-nav"><a href="{{ route('post.index') }}"><i class="fa fa-newspaper-o navcon"></i> Posts</a></li>
-                        <li class="tab active-nav"><a href="{{route('post.trash')}}"><i class="fa fa-trash-o navcon"></i> Trash</a></li>
-                        <li class="tab active-nav"><a href="{{route('user.index')}}"><i class="fa fa-user-o navcon"></i> User</a></li>
-                        <li class="tab active-nav"><a href="{{route('profile.index')}}"><i class="fa fa-key navcon"></i> Profile</a></li>
+                    <ul class="right">
+                    <li>
+                        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="text-darken-3 red-text"> {{ __('Logout') }}</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+                        </li>
+                        <img src="{{ asset(Auth::user()->profile->avatar) }}" lazy="loading" alt="{{ Auth::user()->name}}" height="25px" width="25px" class="" style="border-radius: 45px; line-height:35px; margin-top:5px;">
+                        <li>
+                        <a href="{{route('profile.index')}}" class="dropdown-trigger text-accent-3 white-text" data-target="dropProfile">{{ Auth::user()->name }}</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         </header>
+    @endif
         <div class="row">
-            <div class="wrap container">
+            <div class="wrap">
                 <section class="full-wrapper-width col s12 m12 l12 xl12">
-                    <aside class="left-wrapper-width col l2 xl2 hide-on-med-and-down">
-                        <div class="nav-stick">
-                            <ul class="collapsible collapsible-accordion">
-                                <li><a href="{{ route('home') }}" class="collapsible-header text-accent-3"><i class="fa fa-home"></i> Home</a></li>
-                                <li><a href="{{ route('category.index') }}" class="collapsible-header text-accent-3"><i class="fa fa-home"></i> Category</a></li>
-                                <li><a href="{{ route('post.index') }}" class="collapsible-header text-accent-3"><i class="fa fa-newspaper-o"></i> Posts</a></li>
-                                <li><a href="{{route('post.trash')}}" class="collapsible-header text-accent-3"><i class="fa fa-trash-o"></i>Trash</a></li>
-                                <li><a href="{{route('user.index')}}" class="collapsible-header text-accent-3"><i class="fa fa-user-o"></i>User</a></li>
-                                <li><a href="{{route('profile.index')}}" class="collapsible-header text-accent-3"><i class="fa fa-key"></i>Profile</a></li>
-                                @if(Auth::check())
-                                <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="collapsible-header text-darken-3 red-text"><i class="fa fa-lock"></i> {{ __('Logout') }}</a></li>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-                                @endif
+                @if(Auth::check())
+                    <aside class="left-wrapper-width black col l2 xl2 hide-on-med-and-down">
+                        <ul id="slide-out" class="sidenav sidenav-fixed hide-on-med-and-down black white-text">
+                            <ul class="collapsible collapsed">
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="{{ route('home') }}" class="white-text"><i class="fa fa-home"></i> Dashboard</a>
+                                    </div>
+                                </li>
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="#" class="white-text"><i class="fa fa-plus"></i> Posts</a>
+                                    </div>
+                                    <div class="collapsible-body grey darken-3">
+                                        <a href="{{ route('post.index') }}" class="white-text"> All Posts</a>
+                                    </div>
+                                    <div class="collapsible-body grey darken-3">
+                                        <a href="{{ route('post.create') }}" class="white-text"> Add New</a>
+                                    </div>
+                                </li>
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="{{ route('post.media') }}" class="white-text"><i class="fa fa-file-video-o"></i> Media</a>
+                                    </div>
+                                </li>
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="{{ route('category.index') }}" class="white-text"><i class="fa fa-file-o"></i> Pages</a>
+                                    </div>
+                                </li>
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="{{ route('comment.index') }}" class="white-text"><i class="fa fa-comment"></i> Comments</a>
+                                    </div>
+                                </li>
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="#?" class="white-text"><i class="fa fa-user"></i> Users</a>
+                                    </div>
+                                    <div class="collapsible-body grey darken-3">
+                                        <a href="{{ route('user.index') }}" class="white-text"> All Users</a>
+                                    </div>
+                                    <div class="collapsible-body grey darken-3">
+                                        <a href="{{ route('user.create') }}" class="white-text"> Add New</a>
+                                    </div>
+                                </li>
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="{{ route('post.trash') }}" class="white-text"><i class="fa fa-trash"></i> Trash</a>
+                                    </div>
+                                </li>
+                                <li class="head-col">
+                                    <div class="collapsible-header">
+                                        <a href="#" class="white-text"><i class="fa fa-newspaper-o"></i> Adverts</a>
+                                    </div>
+                                    <div class="collapsible-body grey darken-3">
+                                        <a href="{{ route('advert.index') }}" class="white-text"> All Adverts</a>
+                                    </div>
+                                    <div class="collapsible-body grey darken-3">
+                                        <a href="{{ route('advert.create') }}" class="white-text"> Add New</a>
+                                    </div>
+                                    <div class="collapsible-body grey darken-3">
+                                        <a href="{{ route('advert.trash') }}" class="white-text"> Stopped Ads</a>
+                                    </div>
+                                </li>
                             </ul>
-                        </div>
+                        </ul>
                     </aside>
+                @endif
                     <main class="py-4 col s12 m12 l10 xl10">
+                        <div class="container">
                         @yield('content')
+                        </div>
                     </main>
                 </section>
             </div>

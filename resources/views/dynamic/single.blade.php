@@ -24,44 +24,109 @@
             <!-- sidebar action: views, comment count, share -->
             <div class="sidebar-action col xl3 l3 hide-on-med-and-down">
                 <div class="sticky-sidebar">
+                <p class="grey-text margin-0 mb-0">Advertisement</p>
                     <div class="slider center">
                         <ul class="slides">
-                            <li class="blue darken-4">
-                                <h5 class="white-text" style="margin-bottom:0px;">Welcome to Koko Blog &#128077;</h5>
-                                <i class="white-text">Na the koko we dey serve...</i>
-                                <p class="white-text" style="margin-left:6px; margin-right:6px;" >Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, earum maxime natus nulla odio rem nostrum iusto! Tempora, ad eligendi.</p>
-                                <a href="#" class="btn-flat green white-text">Learn More</a>
+                        @if($sidevert->count() > 0)
+                        @foreach($sidevert as $advert)
+                            <li class="transparent darken-4">
+                                <a href="{{$advert->link}}" target="_blank" style="text-transform: unset;">
+                                    <img src="{{asset($advert->image)}}" class="responsive-img" alt="Banner Ads">
+                                </a>
                             </li>
-                            <li class="red darken-4">
-                                <h5 class="white-text" style="margin-bottom:0px;">Koko News</h5>
-                                <i class="white-text">Na the koko we dey serve...</i>
-                                <p class="white-text" style="margin-left:6px; margin-right:6px;" >Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, earum maxime natus nulla odio rem nostrum iusto! Tempora, ad eligendi.</p>
-                            </li>
+                        @endforeach
+                        @else
+                            <div class="card bdr nosh mt-0">
+                                <div class="card-image">
+                                    <a href="#" target="_blank"><img src="" alt="Buy ads space"></a>
+                                </div>
+                            </div>
+                        @endif
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="read-action col xl9 l9 m12 s12">
                 <div class="title">
-                    <h5 class="blue-text text-darken-4">{{ $post->title }}</h5>
-                    <p><i class="fa fa-clock-o"></i> Published {{ $post->created_at->diffForHumans() }}</p>
+                    <h5 class="blue-text text-darken-1">{{ $post->title }}</h5>
+                    <p><i class="fa fa-clock-o"></i> Published {{ $post->created_at->toFormattedDateString() }} &bull; {{$post->view_count}} @if($post->view_count > 1)  People @else Person @endif view this post &bull; {{$comments->count()}} @if($comments->count() > 1)  Comments @else Comment @endif / <a class="chip blue white-text">{{ $post->category->name }}</a></p>
                 </div>
-                <div class="divider"></div>
                 <div class="image-wrapper center-align center content-centered image-wrap">
-                    <img data-src="{{ $post->image }}" alt="{{ $post->title }}" class="responsive-img lazy">
+                    <div class="card nosh">
+                        <div class="card-image image-con transparent">
+                            <img data-src="{{ $post->image }}" alt="{{ $post->title }}" class="responsive-img lazy">
+                        </div>
+                    </div>
                 </div>
                 <div class="post-content">
                     {!! $post->content !!}
                 </div>
-                <div class="divider"></div>
-                <h5 class="blue-text text-darken-4">{{$comments->count()}} @if($comments->count() > 1)  Comments @else Comment @endif</h5>
+                @if($adverts->count() > 0)
+                @foreach($adverts->take(1) as $advert)
+                <p class="grey-text margin-0 mb-0">{{$advert->ads_type}}</p>
+                <div class="card bdr nosh mt-0">
+                    <div class="card-image">
+                        <a href="{{$advert->link}}" target="_blank"><img src="{{asset($advert->image)}}" alt="Banner Ads"></a>
+                    </div>
+                </div>
+                @endforeach
+                @else
+                <div class="card bdr nosh mt-0">
+                    <div class="card-image">
+                        <a href="#" target="_blank"><img src="" alt="Buy ads space"></a>
+                    </div>
+                </div>
+                @endif
+                <div class="divider"></div><br>
+                <div class="navigation">
+                    <div class="row">
+                        @if($prev)
+                        <div class="col s6 m6 l6 xl6 left">
+                            <div class="prev left">
+                                <a href="{{ route('single.index', ['slug' => $prev->slug]) }}" class="left-align">
+                                    <span class="grey-text">Previous Article</span><br>
+                                    <span>{{$prev->title}}</span>
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+                        @if($next)
+                        <div class="col s6 m6 l6 xl6 right">
+                            <div class="next right">
+                                <a href="{{ route('single.index', ['slug' => $next->slug]) }}" class="right-align">
+                                    <span class="grey-text">Next Article</span><br>
+                                    <span>{{$next->title}}</span>
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                <div class="stat-info">
+                    <div class="lead-info col xl12 l12 m12 s12 optimize-status" id="optimize-stat">
+                        <h6>Read Also</h6>
+                        <div class="card-panel nosh info-text blue lighten-4 z-depth-1">
+                        @foreach($singlePost as $post)
+                            <div class="row valign-wrapper info-content">
+                                <div class="col s4 m3 l2 xl2">
+                                    <img src="{{$post->image}}" alt="{{$post->title}}" class="circle rounded responsive-img">
+                                </div>
+                                <div class="col s8 m9 l10 xl10">
+                                    <span class="black-text opt-title"><a href="{{ route('single.index', ['slug' => $post->slug]) }}">{{$post->title}}</a></span> <small class="green-text text-darken-3"> <i class="fa fa-bolt"></i> Bolt Mode</small>
+                                </div>
+                            </div>
+                        @endforeach
+                        </div>
+                    </div>
+                </div>
+                <h5 class="blue-text text-darken-1">{{$comments->count()}} @if($comments->count() > 1)  Comments @else Comment @endif</h5>
                 @include('partials._comment_replies', ['comments' => $post->comments, 'id' => $post->id])
                 <div class="comment-val">
                     <div class="card-body">
                         <form method="post" action="{{ route('comment.add') }}" enctype="multipart/form-data" id="comment-field">
                         <h5>Leave a comment</h5>
                         {{ csrf_field() }}
-                        @include('user.include.errors')
+                        @include('includes.errors')
                             <div class="card transparent nosh bdr">
                                 <div class="card-content">
                                     <div class="row margin-0">
@@ -98,4 +163,5 @@
         </div>
     </div>
 </div>
+@include('includes.floating')
 @endsection

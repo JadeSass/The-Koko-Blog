@@ -1,7 +1,7 @@
 <header class="navbar-fixed">
     <nav class="black-text white-text nav-extended nav-extend">
         <div class="nav-wrapper container">
-            <a href="#" class="brand-logo left blue-text">Koko Blog</a>
+            <a href="#" class="brand-logo left blue-text"><img src="{{asset('img/logo.jpg')}}" height="140px" width="180px" class="responsive-img brand-img" alt=""></a>
             <form action="/results" method="GET" class="container">
                 <div class="input-field hoverable">
                     <input type="search" class="searchnav" placeholder="Search..."  id="search" name="query" required>
@@ -17,15 +17,8 @@
           <ul class="tabs tabs-transparent row">
                 <li class="tab active-nav"><a href="{{route('index')}}" class="refs"><i class="fa fa-home navcon"></i> Home</a></li>
                 @foreach($categories as $category)
-                <li class="tab"><a href="{{route('post.index')}}" class="refs"><i class="fa fa-image navcon"></i> {{$category->name}}</a></li>
+                <li class="tab"><a href="{{route('category.all', ['id' => $category->id])}}" class="refs">{{$category->name}}</a></li>
                 @endforeach
-                <li class="tab">
-                    <div class="switch theme-switch-wrapper">
-                        <label class="theme-switch">
-                            Light <input type="checkbox" id="checkbox"><span class="lever"></span> Dark
-                        </label>
-                    </div>
-                </li>
             </ul>
         </div>
     </nav>

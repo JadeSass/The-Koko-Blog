@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration
             $table->text('content');
             $table->string('image');
             $table->string('slug');
+            $table->bigInteger('view_count')->unsigned()->default(0)->index();
             $table->string('category_id');
 
             $table->softDeletes();

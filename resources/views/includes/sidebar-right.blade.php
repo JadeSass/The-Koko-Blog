@@ -6,22 +6,26 @@
                 <div class="switch optimization-switch-wrapper">
                     <label class="optimize-switch">
                         See Images <input type="checkbox" id="checkbox"><span class="lever"></span> Optimize
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores voluptas quos illo ad sint similique unde voluptate praesentium eius culpa.</p>
+                        <p>Activating the optimize button removes images from your view and increasing the site speed by 40%, leaving you with the contents unchanged and reduce the rate at which data is consumed. This does not restrict you from accessing other features on this website. <a href=""><i>Learn more</i></a></p>
                     </label>
                 </div>
             </div>
         </div>
-        <p class="grey-text margin-0 mb-0">Advertisement</p>
+        @if($sponsored->count() > 0)
+        @foreach($sponsored as $advert)
+        <p class="grey-text margin-0 mb-0">{{$advert->ads_type}}</p>
         <div class="card bdr nosh mt-0">
             <div class="card-image">
-                <img src="{{asset('img/dan.jpg')}}" alt="">
+                <a href="{{$advert->link}}" target="_blank"><img src="{{asset($advert->image)}}" alt="Banner Ads"></a>
             </div>
         </div>
-        <p class="grey-text margin-0 mb-0">Sponsored Post</p>
+        @endforeach
+        @else
         <div class="card bdr nosh mt-0">
             <div class="card-image">
-                <img src="{{asset('img/dan.jpg')}}" alt="">
+                <a href="#" target="_blank"><img src="" alt="Buy ads space"></a>
             </div>
         </div>
+        @endif
     </div>
 </div>

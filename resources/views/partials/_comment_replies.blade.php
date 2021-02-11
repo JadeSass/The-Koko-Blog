@@ -18,7 +18,7 @@
             <div class="card-body">
                 <h6>Leave a reply to {{$comment->name}}</h6>
                 {{ csrf_field() }}
-                @include('user.include.errors')
+                @include('includes.errors')
                     <div class="card transparent nosh bdr">
                         <div class="card-content">
                             <div class="row" style="margin-bottom: 0px;">

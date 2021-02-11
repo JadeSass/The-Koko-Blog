@@ -15,6 +15,10 @@ class Post extends Model
     {
         return $this->belongsTo('App\Category');
     }
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
     public function getImageAttribute($image)
     {
         return asset($image);
@@ -23,7 +27,12 @@ class Post extends Model
     {
         return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
-    protected $dates = ['drafted_at'];
+
+    public function incrementReadCount() {
+        $this->view_count++;
+        return $this->save();
+    }
+    protected $dates = ['deleted_at'];
     public $incrementing = false;
     public static function boot(){
         parent::boot();
